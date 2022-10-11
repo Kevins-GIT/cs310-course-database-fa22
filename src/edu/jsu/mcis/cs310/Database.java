@@ -26,8 +26,7 @@ public class Database {
         
         // INSERT YOUR CODE HERE
         
-        return result;
-        
+        return result;     
     }
     
     public int register(int studentid, int termid, int crn) {
@@ -35,7 +34,11 @@ public class Database {
         int result = 0;
         
         // INSERT YOUR CODE HERE
-        lolo
+        try{
+            
+        }
+        
+        catch(Exception e){e.printStackTrace();}
         return result;
         
     }
@@ -46,6 +49,14 @@ public class Database {
         
         // INSERT YOUR CODE HERE
         
+        try{
+            String query = "Delete from registration where studentid = (?) and termid = (?) and crn = (?)";
+            PreparedStatement pstmt = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+            pstmt.setInt(1, studentid);
+            pstmt.setInt(2, termid);
+            pstmt.setInt(3, crn);
+        }
+        catch(Exception e){e.printStackTrace();}
         return result;
         
     }
@@ -56,6 +67,14 @@ public class Database {
         
         // INSERT YOUR CODE HERE
         
+        try{
+            String query = "Delete from registration where studentid = (?) and termid = (?) and crn = (?)";
+            PreparedStatement pstmt = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+            pstmt.setInt(1, studentid);
+        }
+        
+        //SQLException since it is using mySQL
+        catch(SQLException e){e.printStackTrace();}
         return result;
         
     }
@@ -66,8 +85,7 @@ public class Database {
         
         // INSERT YOUR CODE HERE
         
-        return result;
-        
+        return result;   
     }
     
     public int getStudentId(String username) {
@@ -95,8 +113,7 @@ public class Database {
         }
         catch (Exception e) { e.printStackTrace(); }
         
-        return id;
-        
+        return id;  
     }
     
     public boolean isConnected() {
@@ -112,8 +129,7 @@ public class Database {
         }
         catch (Exception e) { e.printStackTrace(); }
         
-        return result;
-        
+        return result; 
     }
     
     /* PRIVATE METHODS */
@@ -141,7 +157,6 @@ public class Database {
         }
         
         return c;
-        
     }
     
     private String getResultSetAsJSON(ResultSet resultset) {
@@ -161,7 +176,10 @@ public class Database {
             int columnCount = metadata.getColumnCount();
             
             // INSERT YOUR CODE HERE
-        
+            JSONObject obj = new JSONObject();
+            for(int){
+                
+            }    
         }
         catch (Exception e) { e.printStackTrace(); }
         
@@ -169,7 +187,6 @@ public class Database {
         
         result = JSONValue.toJSONString(json);
         return result;
-        
     }
     
 }
