@@ -24,8 +24,19 @@ public class Database {
         
         String result = null;
         
-        // INSERT YOUR CODE HERE
-        
+        String query = "Select from section where termid? and subjectid=? and num?";
+        try{
+            PreparedStatement stmt = connection.prepareCall(query);
+            stmt.setInt(1, termid);
+            stmt.setString(2, subjectid);
+            stmt.setString(3, num);
+            
+            if(stmt.execute()){
+                ResultSet resultSet = stmt.getResultSet();
+                result = getResultSetAsJSON(resultSet);
+            }
+        }
+        catch(Exception e){e.printStackTrace();}
         return result;     
     }
     
@@ -33,12 +44,16 @@ public class Database {
         
         int result = 0;
         
-        // INSERT YOUR CODE HERE
         try{
-            
+            String query = "Add registration (studentid, termid, crn) values (?, ?, ?)";
+            PreparedStatement pstmt = connection.prepareStatement(query);
+            pstmt.setInt(1, studentid);
+            pstmt.setInt(2, termid);
+            pstmt.setInt(3, crn);
+            result = pstmt.executeUpdate();
         }
         
-        catch(Exception e){e.printStackTrace();}
+        catch(SQLException e){e.printStackTrace();}
         return result;
         
     }
@@ -47,16 +62,17 @@ public class Database {
         
         int result = 0;
         
-        // INSERT YOUR CODE HERE
-        
+         String query = "Delete from registration where studentid = (?) and termid = (?) and crn = (?)";
         try{
-            String query = "Delete from registration where studentid = (?) and termid = (?) and crn = (?)";
-            PreparedStatement pstmt = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement pstmt = this.connection.prepareStatement(query);
             pstmt.setInt(1, studentid);
             pstmt.setInt(2, termid);
             pstmt.setInt(3, crn);
+            
+            result = pstmt.executeUpdate();
         }
-        catch(Exception e){e.printStackTrace();}
+        
+        catch(SQLException e){e.printStackTrace();}
         return result;
         
     }
@@ -65,12 +81,12 @@ public class Database {
         
         int result = 0;
         
-        // INSERT YOUR CODE HERE
         
         try{
-            String query = "Delete from registration where studentid = (?) and termid = (?) and crn = (?)";
+            String query = "Delete from registration where studentid = (?)";
             PreparedStatement pstmt = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
             pstmt.setInt(1, studentid);
+            result = pstmt.executeUpdate();
         }
         
         //SQLException since it is using mySQL
@@ -83,8 +99,19 @@ public class Database {
         
         String result = null;
         
-        // INSERT YOUR CODE HERE
-        
+        String query = "Select from registration where studentid=? and termid=?";
+        PreparedStatement stmt;
+        try{
+            stmt = connection.prepareStatement(query);
+            stmt.setInt(1, termid);
+            stmt.setInt(2, termid);
+            
+            if(stmt.execute()){
+                ResultSet resultSet = stmt.getResultSet();
+                result = getResultSetAsJSON(resultSet);
+            }
+        }
+        catch(Exception e){e.printStackTrace();}
         return result;   
     }
     
@@ -175,11 +202,13 @@ public class Database {
             ResultSetMetaData metadata = resultset.getMetaData();
             int columnCount = metadata.getColumnCount();
             
-            // INSERT YOUR CODE HERE
             JSONObject obj = new JSONObject();
-            for(int){
-                
-            }    
+            while(resultset.next()){
+                for(int i = 0; i < columnCount; i++){
+                    obj.put(metadata.getColumnLabel(i+1).toLowerCase(), resultset.getObject(i+1).toString());
+                }   
+                json.add(obj);
+            }
         }
         catch (Exception e) { e.printStackTrace(); }
         
